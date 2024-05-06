@@ -363,10 +363,13 @@ class Playlist(Sequence):
         :return: Playlist video count
         :rtype: int
         """
-        count_text = self.sidebar_info[0]['playlistSidebarPrimaryInfoRenderer'][
-            'stats'][0]['runs'][0]['text']
-        count_text = count_text.replace(',','')
-        return int(count_text)
+        try:
+            count_text = self.sidebar_info[0]['playlistSidebarPrimaryInfoRenderer'][
+                'stats'][0]['runs'][0]['text']
+            count_text = count_text.replace(',','')
+            return int(count_text)
+        except ValueError:
+            return 1
 
     @property
     def views(self):
@@ -382,6 +385,8 @@ class Playlist(Sequence):
         count_text = views_text.split()[0]
         # "1234567"
         count_text = count_text.replace(',', '')
+        if count_text == "No":
+            return 0
         return int(count_text)
 
     @property
